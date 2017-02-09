@@ -3,6 +3,11 @@ package br.com.caelum.agiletickets.models;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class EspetaculoTest {
@@ -68,11 +73,89 @@ public class EspetaculoTest {
 
 		ivete.getSessoes().add(sessaoComIngressosSobrando(2));
 		ivete.getSessoes().add(sessaoComIngressosSobrando(2));
-		ivete.getSessoes().add(sessaoComIngressosSobrando(2));
+		ivete.getSessoes().
+		add(sessaoComIngressosSobrando(2));
 
 		assertFalse(ivete.Vagas(5, 3));
 	}
 
+	@Test
+	public void deveCriarUmaUnicaSessaoQuandoInicioIgualAFim() {
+		//Arrange
+		Espetaculo espetaculo = new Espetaculo();
+		LocalDate inicio = new LocalDate(2017, 2, 9);
+		LocalDate fim = new LocalDate(2017, 2, 9);
+		LocalTime horario = new LocalTime(21,0);
+		Periodicidade periodicidade = Periodicidade.DIARIA;
+		
+		//act
+		List<Sessao> sessoes = espetaculo.criaSessoes(inicio, fim, horario, periodicidade);
+		
+		//assert
+		Assert.assertNotNull("A lista de sessoes não deve ser nula.", sessoes);
+		Assert.assertEquals(1, sessoes.size());
+		
+		Sessao unica = sessoes.get(0);
+		Assert.assertEquals(espetaculo, unica.getEspetaculo());
+		Assert.assertEquals("09/02/17", unica.getDia());
+		Assert.assertEquals("21:00", unica.getHora());
+	}
+	
+	
+	@Test
+	public void deveCriarSessoesQuandoFimEhMaiorQueOInicio(){
+		//Arrange
+		Espetaculo espetaculo = new Espetaculo();
+		LocalDate inicio = new LocalDate(2017, 2, 9);
+		LocalDate fim = new LocalDate(2017, 2, 10);
+		LocalTime horario = new LocalTime(17,0);
+		Periodicidade periodicidade = Periodicidade.DIARIA;
+		
+		//act
+		List<Sessao> sessoes = espetaculo.criaSessoes(inicio, fim, horario, periodicidade);
+		
+		//assert
+		Assert.assertNotNull("A lista de sessoes não deve ser nula.", sessoes);
+		Assert.assertEquals(2, sessoes.size());
+		
+		Sessao unica = sessoes.get(0);
+		Assert.assertEquals(espetaculo, unica.getEspetaculo());
+		Assert.assertEquals("09/02/17", unica.getDia());
+		Assert.assertEquals("21:00", unica.getHora());
+		
+		unica = sessoes.get(1);
+		Assert.assertEquals(espetaculo, unica.getEspetaculo());
+		Assert.assertEquals("10/02/17", unica.getDia());
+		Assert.assertEquals("21:00", unica.getHora());
+	}
+	
+	@Test
+	public void deveCriarSessoesSemanaisQuandoFimEhMaiorQueOInicio(){
+		//Arrange
+		Espetaculo espetaculo = new Espetaculo();
+		LocalDate inicio = new LocalDate(2017, 2, 9);
+		LocalDate fim = new LocalDate(2017, 2, 16);
+		LocalTime horario = new LocalTime(17,0);
+		Periodicidade periodicidade = Periodicidade.SEMANAL;
+		
+		//act
+		List<Sessao> sessoes = espetaculo.criaSessoes(inicio, fim, horario, periodicidade);
+		
+		//assert
+		Assert.assertNotNull("A lista de sessoes não deve ser nula.", sessoes);
+		Assert.assertEquals(2, sessoes.size());
+		
+		Sessao unica = sessoes.get(0);
+		Assert.assertEquals(espetaculo, unica.getEspetaculo());
+		Assert.assertEquals("09/02/17", unica.getDia());
+		Assert.assertEquals("17:00", unica.getHora());
+		
+		unica = sessoes.get(1);
+		Assert.assertEquals(espetaculo, unica.getEspetaculo());
+		Assert.assertEquals("16/02/17", unica.getDia());
+		Assert.assertEquals("17:00", unica.getHora());
+	}
+	
 	private Sessao sessaoComIngressosSobrando(int quantidade) {
 		Sessao sessao = new Sessao();
 		sessao.setTotalIngressos(quantidade * 2);
@@ -82,3 +165,4 @@ public class EspetaculoTest {
 	}
 	
 }
+
