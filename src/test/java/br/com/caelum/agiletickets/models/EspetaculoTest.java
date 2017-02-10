@@ -121,12 +121,12 @@ public class EspetaculoTest {
 		Sessao unica = sessoes.get(0);
 		Assert.assertEquals(espetaculo, unica.getEspetaculo());
 		Assert.assertEquals("09/02/17", unica.getDia());
-		Assert.assertEquals("21:00", unica.getHora());
+		Assert.assertEquals("17:00", unica.getHora());
 		
 		unica = sessoes.get(1);
 		Assert.assertEquals(espetaculo, unica.getEspetaculo());
 		Assert.assertEquals("10/02/17", unica.getDia());
-		Assert.assertEquals("21:00", unica.getHora());
+		Assert.assertEquals("17:00", unica.getHora());
 	}
 	
 	@Test
